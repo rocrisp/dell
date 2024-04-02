@@ -1,0 +1,4 @@
+index: "registry.redhat.io/redhat/redhat-operator-index:v4.14"
+package: "rhods-operator"
+channel: "stable-2.8"
+installNamespace: "redhat-ods-operator"
