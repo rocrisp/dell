@@ -1,21 +1,43 @@
-Make these repositories public
-openshift-serverless-1 / ingress-rhel8-operator
-openshift-serverless-1 / serverless-rhel8-operator 
-openshift-serverless-1 / kn-cli-artifacts-rhel8
-openshift-serverless-1 / knative-rhel8-operator 
-openshift-service-mesh / istio-rhel8-operator
-rhoai / odh-rhel8-operator 
-rhoai / odh-data-science-pipelines-operator-controller-rhel8
-openshift4 / ose-cli
-openshift4 / ose-oauth-proxy 
-rhoai / odh-modelmesh-serving-controller-rhel8
-rhoai / odh-kf-notebook-controller-rhel8
-rhoai / odh-model-controller-rhel8
-rhoai / odh-notebook-controller-rhel8
-rhoai / odh-dashboard-rhel8
-rhel7 / etcd
+### Procedure to Install Red Hat OpenShift AI and Its Dependencies
 
-#Install Red HatOpenShift AI and it's dependencies(serveless operator, servicemesh operator)
+This guide outlines the steps to deploy Red Hat OpenShift AI, including necessary dependencies such as the Serverless Operator and Service Mesh Operator.
 
-1. To deploy catalogsource, Apply config/catalogSource-cs-redhat-operator-index.yaml
-2. To deploy the Operators and the operand, run ./run-install.sh
+#### Context
+This deployment is part of the Disconnected OCP (OpenShift Container Platform) project utilizing Quay private repositories.
+
+#### Important Notes:
+- Ensure that these repositories are set to public within your Quay repository settings. If they remain private, the deployment process will fail to pull images for the operators.
+
+#### List of Required Quay Repositories
+- **openshift-serverless-1**:
+  - `ingress-rhel8-operator`
+  - `serverless-rhel8-operator`
+  - `kn-cli-artifacts-rhel8`
+  - `knative-rhel8-operator`
+- **openshift-service-mesh**:
+  - `istio-rhel8-operator`
+- **rhoai** (Red Hat OpenShift AI):
+  - `odh-rhel8-operator`
+  - `odh-data-science-pipelines-operator-controller-rhel8`
+  - `odh-modelmesh-serving-controller-rhel8`
+  - `odh-kf-notebook-controller-rhel8`
+  - `odh-model-controller-rhel8`
+  - `odh-notebook-controller-rhel8`
+  - `odh-dashboard-rhel8`
+- **openshift4**:
+  - `ose-cli`
+  - `ose-oauth-proxy`
+- **rhel7**:
+  - `etcd`
+
+### Deployment Steps
+1. **Deploy the CatalogSource**: 
+   - Apply the configuration by running:
+     ```shell
+     kubectl apply -f config/catalogSource-cs-redhat-operator-index.yaml
+     ```
+2. **Deploy Operators and Operands**:
+   - Execute the installation script:
+     ```shell
+     ./run-install.sh
+     ```
