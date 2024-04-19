@@ -23,15 +23,14 @@ done
 
 
 # Read configurations from the YAML file
-#operator index image
-INDEX=$(yq e '.index' $CONFIG_FILE)
 #operator package name
 PACKAGE=$(yq e '.package' $CONFIG_FILE)
 #operator channel to track
 CHANNEL=$(yq e '.channel' $CONFIG_FILE)
 #namespace to install the operator
 INSTALL_NAMESPACE=$(yq e '.installNamespace' $CONFIG_FILE)
-
+SOURCE_NAMESPACE=openshift-marketplace
+CATSRC=cs-redhat-operator-index
 
 # A comma-separated list of namespaces the operator will target. Special, value
 # `!all` means that all namespaces will be targeted. If no OperatorGroup exists
@@ -40,7 +39,7 @@ INSTALL_NAMESPACE=$(yq e '.installNamespace' $CONFIG_FILE)
 # namespace set will be replaced. The special value "!install" will set the
 # target namespace to the operator's installation namespace.
 
-TARGET_NAMESPACES=""
+TARGET_NAMESPACES="*"
 
 if [[ "$INSTALL_NAMESPACE" == "!create" ]]; then
     echo "INSTALL_NAMESPACE is '!create': creating new namespace"
@@ -74,33 +73,12 @@ kind: OperatorGroup
 metadata:
   name: $PACKAGE
   namespace: $INSTALL_NAMESPACE
-spec:
-  targetNamespaces: ["$TARGET_NAMESPACES"]
 EOF
 )
 
 echo "OperatorGroup name is \"$OPERATORGROUP\""
 
-echo "Creating CatalogSource"
-
-CATSRC=$(
-    oc create -f - -o jsonpath='{.metadata.name}' <<EOF
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
-  name: $PACKAGE
-  namespace: $INSTALL_NAMESPACE
-  labels:
-    app: $PACKAGE
-spec:
-  sourceType: grpc
-  image: "$INDEX"
-EOF
-)
-
-echo "CatalogSource name is \"$CATSRC\""
-
-echo "Creating Subscription"
+echo "Creating subscription"
 
 SUB=$(
     oc create -f - -o jsonpath='{.metadata.name}' <<EOF
@@ -115,7 +93,7 @@ spec:
   name: $PACKAGE
   channel: "$CHANNEL"
   source: $CATSRC
-  sourceNamespace: $INSTALL_NAMESPACE
+  sourceNamespace: $SOURCE_NAMESPACE
 EOF
 )
 

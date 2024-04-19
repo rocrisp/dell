@@ -1,4 +1,3 @@
-index: "registry.redhat.io/redhat/redhat-operator-index:v4.14"
 package: "servicemeshoperator"
 channel: "stable"
 installNamespace: "openshift-servicemesh"
