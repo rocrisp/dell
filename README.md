@@ -5,38 +5,19 @@ This guide outlines the steps to deploy Red Hat OpenShift AI, including necessar
 #### Context
 This deployment is part of the Disconnected OCP (OpenShift Container Platform) project utilizing Quay private repositories.
 
-#### Important Notes:
-- Ensure that these repositories are set to public within your Quay repository settings. If they remain private, the deployment process will fail to pull images for the operators.
-
-#### List of Required Quay Repositories
-- **openshift-serverless-1**:
-  - `ingress-rhel8-operator`
-  - `serverless-rhel8-operator`
-  - `kn-cli-artifacts-rhel8`
-  - `knative-rhel8-operator`
-- **openshift-service-mesh**:
-  - `istio-rhel8-operator`
-- **rhoai** (Red Hat OpenShift AI):
-  - `odh-rhel8-operator`
-  - `odh-data-science-pipelines-operator-controller-rhel8`
-  - `odh-modelmesh-serving-controller-rhel8`
-  - `odh-kf-notebook-controller-rhel8`
-  - `odh-model-controller-rhel8`
-  - `odh-notebook-controller-rhel8`
-  - `odh-dashboard-rhel8`
-- **openshift4**:
-  - `ose-cli`
-  - `ose-oauth-proxy`
-- **rhel7**:
-  - `etcd`
 
 ### Deployment Steps
-1. **Deploy the CatalogSource**: 
+1. **Clone this repository to your local machine**
+2. **Modify config/catalogSource-cs-redhat-operator-index.yaml**
+   - Change spec.image to your index image.
+     Additional details are available [here]([https://docs.openshift.com/container-platform/4.15/post_installation_configuration/preparing-for-users.html#olm-creating-catalog-from-index_post-install-preparing-for-users).
+   - Apply secrets
+3. **Deploy the CatalogSource**: 
    - Apply the configuration by running:
      ```shell
      kubectl apply -f config/catalogSource-cs-redhat-operator-index.yaml
      ```
-2. **Deploy Operators and Operands**:
+4. **Deploy Operators and Operands**:
    - Execute the installation script:
      ```shell
      ./run-install.sh
